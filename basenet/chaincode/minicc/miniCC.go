@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric-chaincode-go/shim"
 	"github.com/hyperledger/fabric-protos-go/peer"
@@ -76,10 +75,10 @@ func(t *miniCC) queryState(stub shim.ChaincodeStubInterface,args []string) peer.
 	if err != nil{
 		return shim.Error(err.Error())
 	}
-	record := &Record{}
-	json.Unmarshal(recordAsBytes,record)
-	state := record.A
-	return shim.Success([]byte(state))
+	//record := &Record{}
+	//json.Unmarshal(recordAsBytes,record)
+	//state := record.A
+	return shim.Success(recordAsBytes)
 }
 
 //peer chaincode invoke -C myc -n mycc -c '{"Args":["getState","issuedState"]}'

@@ -7,7 +7,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/hyperledger/fabric-chaincode-go/shim"
@@ -42,16 +41,16 @@ func (t *miniCC) Init(stub shim.ChaincodeStubInterface) peer.Response {
 		A:  A0.String(),
 		N:   N.String(),
 	}
-	stateAsBytes,err := json.Marshal(accstate.A)
-	if err!= nil{
-		return shim.Error(err.Error())
-	}
-	err = stub.PutState(ISSUESTATE,stateAsBytes)
+	//stateAsBytes,err := json.Marshal(accstate.A)
+	//if err!= nil{
+	//	return shim.Error(err.Error())
+	//}
+	err := stub.PutState(ISSUESTATE,[]byte(accstate.A))
 	if err!=nil{
 		return shim.Error(err.Error())
 	}
 
-	fmt.Printf("Init accumulator %s \n", string(stateAsBytes))
+	fmt.Printf("Init accumulator %s \n", accstate.A)
 
 	return shim.Success(nil)
 }
