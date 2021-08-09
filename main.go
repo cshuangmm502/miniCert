@@ -1,5 +1,4 @@
 package main
-
 import (
 	"fmt"
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
@@ -9,10 +8,6 @@ import (
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/msp"
 	"github.com/pkg/errors"
 	mspclient "github.com/hyperledger/fabric-sdk-go/pkg/client/msp"
-	"miniCert/service"
-	"miniCert/web"
-	"miniCert/web/controller"
-
 	//"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
 	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
 	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
@@ -25,6 +20,7 @@ import (
 	mb "github.com/hyperledger/fabric-protos-go/msp"
 	contextImpl "github.com/hyperledger/fabric-sdk-go/pkg/context"
 )
+
 
 const configFile = "./conf/sdkconf.yaml"
 
@@ -45,12 +41,13 @@ func main(){
 		OrgAdmin:        "Admin",
 		OrgName:         []string{"Org1","Org2"},
 		OrdererOrgName:  "orderer1.hauturier.com",
-		ChaincodePath:   os.Getenv("GOPATH")+"/src/github.com/hauturier.com/miniCert/basenet/chaincode/sacc",
+		ChaincodePath:   os.Getenv("GOPATH")+"/src/github.com/hauturier.com/miniCert/basenet/chaincode/minicc",
 		ChaincodeID:     "sacc",
 		ChaincodeSequence:	1,
 		UserName:        "User1",
 	}
 	sdkInfo.setSDK()
+
 	err :=sdkInfo.initContext()
 	if err != nil{
 		fmt.Println(err)
@@ -69,17 +66,17 @@ func main(){
 	approveCC(packageID, sdkInfo)
 	//queryApprovedCC(sdkInfo)
 	commitCC(sdkInfo)
-	//
-	serviceSetup := service.ServiceSetup{
-		ChaincodeID: "sacc",
-		Client:      sdkInfo.channelClient,
-	}
-	initCC(sdkInfo)
+	////
+	////serviceSetup := service.ServiceSetup{
+	////	ChaincodeID: "sacc",
+	////	Client:      sdkInfo.channelClient,
+	////}
+	//initCC(sdkInfo)
 
 
 	//启动web服务
-	app := controller.Application{Setup:&serviceSetup}
-	web.WebStart(app)
+	//app := controller.Application{Setup:&serviceSetup}
+	//web.WebStart(app)
 	//启动web服务
 }
 
@@ -113,13 +110,20 @@ func createChannel(info *SDKInfo) error{
 		return fmt.Errorf("failed to join channel%v",err)
 	}
 	fmt.Println("peers success to join channel")
+
+	clientChannelContext := info.SDK.ChannelContext(info.ChannelID,fabsdk.WithUser(info.UserName),fabsdk.WithOrg("Org1"))
+	channelClient,err := channel.New(clientChannelContext)
+	if err != nil {
+		return fmt.Errorf("创建应用通道客户端失败: %v", err)
+	}
+	info.channelClient = channelClient
 	return nil
 }
 
 //2.0新生命周期形式
 func packageCC() (string, []byte) {
 	desc := &lcpackager.Descriptor{
-		Path:  os.Getenv("GOPATH")+"/src/github.com/hauturier.com/miniCert/basenet/chaincode/sacc",
+		Path:  os.Getenv("GOPATH")+"/src/github.com/hauturier.com/miniCert/basenet/chaincode/minicc",
 		Type:  pb.ChaincodeSpec_GOLANG,
 		Label: "sacc",
 	}
@@ -157,6 +161,7 @@ func installCC(label string, ccPkg []byte, sdkInfo *SDKInfo) {
 func approveCC(packageID string,sdkInfo *SDKInfo) {
 	org1peers,err := DiscoverLocalPeers(sdkInfo.org1AdminClientContext,2)
 	if err != nil {
+		fmt.Println("333333")
 		fmt.Println("3 err",err)
 	}
 	//org2peers,err := DiscoverLocalPeers(sdkInfo.org2AdminClientContext,2)
@@ -178,6 +183,7 @@ func approveCC(packageID string,sdkInfo *SDKInfo) {
 
 	resq1, err := sdkInfo.org1ResMgmt.LifecycleApproveCC(sdkInfo.ChannelID, approveCCReq, resmgmt.WithTargets(org1peers...), resmgmt.WithOrdererEndpoint("orderer1.hauturier.com"), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
 	if err != nil {
+		fmt.Println("322222")
 		fmt.Println("3 err: ", peersorg1[0], err)
 	}
 	fmt.Println("3: ", peersorg1[0], resq1)
@@ -319,12 +325,12 @@ func initCC(sdkInfo *SDKInfo){
 }
 
 func(sdkInfo *SDKInfo) initContext() error {
-	clientChannelContext := sdkInfo.SDK.ChannelContext(sdkInfo.ChannelID,fabsdk.WithUser(sdkInfo.UserName),fabsdk.WithOrg("Org1"))
-	channelClient,err := channel.New(clientChannelContext)
-	if err != nil {
-		return fmt.Errorf("创建应用通道客户端失败: %v", err)
-	}
-	sdkInfo.channelClient = channelClient
+	//clientChannelContext := sdkInfo.SDK.ChannelContext(sdkInfo.ChannelID,fabsdk.WithUser(sdkInfo.UserName),fabsdk.WithOrg("Org1"))
+	//channelClient,err := channel.New(clientChannelContext)
+	//if err != nil {
+	//	return fmt.Errorf("创建应用通道客户端失败: %v", err)
+	//}
+	//sdkInfo.channelClient = channelClient
 
 	clientContext1 := sdkInfo.SDK.Context(fabsdk.WithUser(sdkInfo.OrgAdmin), fabsdk.WithOrg("Org1"))
 	clientContext2 := sdkInfo.SDK.Context(fabsdk.WithUser(sdkInfo.OrgAdmin), fabsdk.WithOrg("Org2"))
