@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="miniCert">
+    <serverData>
+      <paths name="miniCert">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/miniCert" local="$PROJECT_DIR$" web="/miniCert" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

@@ -1,0 +1,265 @@
+version: 1.0.0
+
+client:
+  organization: org1
+  logging:
+    level: info
+  cryptoconfig:
+    path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config
+  credentialStore:
+    path: "/tmp/state-store"
+    cryptoStore:
+      path: /tmp/msp
+  BCCSP:
+    security:
+    enabled: true
+    default:
+    provider: "SW"
+    hashAlgorithm: "SHA2"
+    softVerify: true
+    level: 256
+
+  tlsCerts:
+    systemCertPool: true
+    client:
+      key:
+        path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/peerOrganizations/org1.hauturier.com/users/User1@org1.hauturier.com/tls/client.key
+      cert:
+        path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/peerOrganizations/org1.hauturier.com/users/User1@org1.hauturier.com/tls/client.crt
+
+channels:
+  mychannel:
+    peers:
+      peer0.org1.hauturier.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer1.org1.hauturier.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+#      peer0.org2.hauturier.com:
+#        endorsingPeer: true
+#        chaincodeQuery: true
+#        ledgerQuery: true
+#        eventSource: true
+#      peer1.org2.hauturier.com:
+#        endorsingPeer: true
+#        chaincodeQuery: true
+#        ledgerQuery: true
+#        eventSource: true
+
+organizations:
+  org1:
+    mspid: Org1MSP
+    cryptoPath:  peerOrganizations/org1.hauturier.com/users/{username}@org1.hauturier.com/msp
+    peers:
+      - peer0.org1.hauturier.com
+      - peer1.org1.hauturier.com
+
+    certificateAuthorities:
+      - ca.org1.hauturier.com
+
+#  org2:
+#    mspid: Org2MSP
+#    cryptoPath:  peerOrganizations/org2.hauturier.com/users/{username}@org2.hauturier.com/msp
+#    peers:
+#      - peer0.org2.hauturier.com
+#      - peer1.org2.hauturier.com
+#    certificateAuthorities:
+#      - ca.org2.hauturier.com
+
+  ordererorg:
+    mspID: OrdererMSP
+    cryptoPath: ordererOrganizations/hauturier.com/users/{username}@hauturier.com/msp
+
+orderers:
+  orderer1.hauturier.com:
+    url: orderer1.hauturier.com:7050
+    grpcOptions:
+      ssl-target-name-override: orderer1.hauturier.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+    tlsCACerts:
+      path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/ordererOrganizations/hauturier.com/tlsca/tlsca.hauturier.com-cert.pem
+
+  orderer2.hauturier.com:
+    url: orderer2.hauturier.com:8050
+    grpcOptions:
+      ssl-target-name-override: orderer2.hauturier.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+    tlsCACerts:
+      path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/ordererOrganizations/hauturier.com/tlsca/tlsca.hauturier.com-cert.pem
+
+  orderer3.hauturier.com:
+    url: orderer3.hauturier.com:7050
+    grpcOptions:
+      ssl-target-name-override: orderer3.hauturier.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+    tlsCACerts:
+      path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/ordererOrganizations/hauturier.com/tlsca/tlsca.hauturier.com-cert.pem
+
+peers:
+  peer0.org1.hauturier.com:
+    url: peer0.org1.hauturier.com:7051
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.hauturier.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+    tlsCACerts:
+      path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/peerOrganizations/org1.hauturier.com/tlsca/tlsca.org1.hauturier.com-cert.pem
+  peer1.org1.hauturier.com:
+    url: peer1.org1.hauturier.com:8051
+    grpcOptions:
+      ssl-target-name-override: peer1.org1.hauturier.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: false
+    tlsCACerts:
+      path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/peerOrganizations/org1.hauturier.com/tlsca/tlsca.org1.hauturier.com-cert.pem
+#  peer0.org2.hauturier.com:
+#    url: peer0.org2.hauturier.com:9050
+#    grpcOptions:
+#      ssl-target-name-override: peer0.org2.hauturier.com
+#      keep-alive-time: 0s
+#      keep-alive-timeout: 20s
+#      keep-alive-permit: false
+#      fail-fast: false
+#      allow-insecure: false
+#    tlsCACerts:
+#      path: /root/dev/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.hauturier.com/tlsca/tlsca.org2.hauturier.com-cert.pem
+#  peer1.org2.hauturier.com:
+#    url: peer1.org2.hauturier.com:9050
+#    grpcOptions:
+#      ssl-target-name-override: peer1.org2.hauturier.com
+#      keep-alive-time: 0s
+#      keep-alive-timeout: 20s
+#      keep-alive-permit: false
+#      fail-fast: false
+#      allow-insecure: false
+#    tlsCACerts:
+#      path: /root/dev/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.hauturier.com/tlsca/tlsca.org2.hauturier.com-cert.pem
+certificateAuthorities:
+  ca.org1.hauturier.com:
+    url: https://ca.org1.hauturier.com:7054
+    tlsCACerts:
+      # Comma-Separated list of paths
+      path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/peerOrganizations/org1.hauturier.com/ca/ca.org1.hauturier.com-cert.pem
+      # Client key and cert for SSL handshake with Fabric CA
+      client:
+        key:
+          path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/peerOrganizations/org1.hauturier.com/users/User1@org1.hauturier.com/tls/client.key
+        cert:
+          path: ${GOPATH}/src/github.com/hauturier.com/miniCert/basenet/crypto-config/peerOrganizations/org1.hauturier.com/users/User1@org1.hauturier.com/tls/client.crt
+
+    # Fabric-CA supports dynamic user enrollment via REST APIs. A "root" user, a.k.a registrar, is
+    # needed to enroll and invoke new users.
+    registrar:
+      enrollId: admin
+      enrollSecret: adminpw
+    # [Optional] The optional name of the CA.
+    caName: ca.org1.hauturier.com
+
+#  ca_peerOrg2:
+#    url: https://ca_peerOrg2:8054
+#    tlsCACerts:
+#      # Comma-Separated list of paths
+#      path: /root/dev/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org1.hauturier.com/tlsca/tlsca.org1.hauturier.com-cert.pem
+#      # Client key and cert for SSL handshake with Fabric CA
+#      client:
+#        key:
+#          path: /root/dev/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.hauturier.com/users/User1@org2.hauturier.com/tls/client.key
+#        cert:
+#          path: /root/dev/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config/peerOrganizations/org2.hauturier.com/users/User1@org2.hauturier.com/tls/client.crt
+#
+#      # Fabric-CA supports dynamic user enrollment via REST APIs. A "root" user, a.k.a registrar, is
+#      # needed to enroll and invoke new users.
+#    registrar:
+#      enrollId: admin
+#      enrollSecret: adminpw
+#    # [Optional] The optional name of the CA.
+#    caName: ca_peerOrg2
+
+
+entityMatchers:
+  peer:
+    - pattern: peer0.org1.hauturier.(\w+)
+      urlSubstitutionExp: localhost:7051
+      sslTargetOverrideUrlSubstitutionExp: peer0.org1.hauturier.com
+      mappedHost: peer0.org1.hauturier.com
+    - pattern: peer1.org1.hauturier.(\w+)
+      urlSubstitutionExp: localhost:8051
+      sslTargetOverrideUrlSubstitutionExp: peer1.org1.hauturier.com
+      mappedHost: peer1.org1.hauturier.com
+#    - pattern: peer0.org2.hauturier.(\w+)
+#      urlSubstitutionExp: localhost:9051
+#      sslTargetOverrideUrlSubstitutionExp: peer0.org2.hauturier.com
+#      mappedHost: peer0.org2.hauturier.com
+#    - pattern: peer1.org2.hauturier.(\w+)
+#      urlSubstitutionExp: localhost:10051
+#      sslTargetOverrideUrlSubstitutionExp: peer1.org2.hauturier.com
+#      mappedHost: peer1.org2.hauturier.com
+    - pattern: (\w+):7051
+      urlSubstitutionExp: localhost:7051
+      sslTargetOverrideUrlSubstitutionExp: peer0.org1.hauturier.com
+      mappedHost: peer0.org1.hauturier.com
+    - pattern: (\w+):8051
+      urlSubstitutionExp: localhost:8051
+      sslTargetOverrideUrlSubstitutionExp: peer1.org1.hauturier.com
+      mappedHost: peer1.org1.hauturier.com
+#    - pattern: (\w+):9051
+#      urlSubstitutionExp: localhost:9051
+#      sslTargetOverrideUrlSubstitutionExp: peer0.org2.hauturier.com
+#      mappedHost: peer0.org2.hauturier.com
+#    - pattern: (\w+):10051
+#      urlSubstitutionExp: localhost:10051
+#      sslTargetOverrideUrlSubstitutionExp: peer1.org2.hauturier.com
+#      mappedHost: peer1.org2.hauturier.com
+  orderer:
+    - pattern: (\w+).hauturier.(\w+)
+      urlSubstitutionExp: localhost:7050
+      sslTargetOverrideUrlSubstitutionExp: orderer1.hauturier.com
+      mappedHost: orderer1.hauturier.com
+
+    - pattern: (\w+).hauturier.(\w+):(\d+)
+      urlSubstitutionExp: localhost:8050
+      sslTargetOverrideUrlSubstitutionExp: orderer2.hauturier.com
+      mappedHost: orderer2.hauturier.com
+
+    - pattern: (\w+).hauturier.(\w+):(\d+)
+      urlSubstitutionExp: localhost:9050
+      sslTargetOverrideUrlSubstitutionExp: orderer3.hauturier.com
+      mappedHost: orderer3.hauturier.com
+
+#  certificateAuthority:
+#    - pattern: (\w*)ca.org1.hauturier.com(\w*)
+#      urlSubstitutionExp: http://localhost:7054
+#      mappedHost: ca.org1.hauturier.com
+#    - pattern: (\w+).org2.hauturier.(\w+)
+#      urlSubstitutionExp:
+#      mappedHost: ca_peerOrg2
+  certificateAuthority:
+    - pattern: (\w+).org1.hauturier.(\w+)
+      urlSubstitutionExp:
+      mappedHost: ca.org1.hauturier.com
+#    - pattern: (\w+).org2.hauturier.(\w+)
+#      urlSubstitutionExp:
+#      mappedHost: ca_peerOrg2
