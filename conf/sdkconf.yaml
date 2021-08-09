@@ -239,12 +239,12 @@ entityMatchers:
       sslTargetOverrideUrlSubstitutionExp: orderer1.hauturier.com
       mappedHost: orderer1.hauturier.com
 
-    - pattern: (\w+).hauturier.(\w+):(\d+)
+    - pattern: (\w+).hauturier.(\w+)
       urlSubstitutionExp: localhost:8050
       sslTargetOverrideUrlSubstitutionExp: orderer2.hauturier.com
       mappedHost: orderer2.hauturier.com
 
-    - pattern: (\w+).hauturier.(\w+):(\d+)
+    - pattern: (\w+).hauturier.(\w+)
       urlSubstitutionExp: localhost:9050
       sslTargetOverrideUrlSubstitutionExp: orderer3.hauturier.com
       mappedHost: orderer3.hauturier.com

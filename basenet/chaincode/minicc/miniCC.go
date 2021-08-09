@@ -82,7 +82,7 @@ func(t *miniCC) queryState(stub shim.ChaincodeStubInterface,args []string) peer.
 	return shim.Success([]byte(state))
 }
 
-//peer chaincode invoke -C myc -n mycc -c '{"function":"queryState","Args":["issuedState","test"]}'
+//peer chaincode invoke -C myc -n mycc -c '{"Args":["getState","issuedState"]}'
 func(t *miniCC) setState(stub shim.ChaincodeStubInterface,args []string) peer.Response{
 	if len(args) != 2 {
 		return shim.Error("Incorrect arguments. Expecting a key and a value")
