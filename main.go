@@ -1,5 +1,6 @@
 package main
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/status"
@@ -8,6 +9,8 @@ import (
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/msp"
 	"github.com/pkg/errors"
 	mspclient "github.com/hyperledger/fabric-sdk-go/pkg/client/msp"
+	"miniCert/utils"
+
 	//"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
 	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
 	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
@@ -71,7 +74,7 @@ func main(){
 	////	ChaincodeID: "sacc",
 	////	Client:      sdkInfo.channelClient,
 	////}
-	//initCC(sdkInfo)
+	initCC(sdkInfo)
 
 
 	//启动web服务
@@ -316,12 +319,21 @@ func commitCC(sdkInfo *SDKInfo) {
 	fmt.Println("5 : 结束")
 }
 
+//'{"Args":["init","issuedState","accStateAsBytes"]}'
 func initCC(sdkInfo *SDKInfo){
-	channelClient := sdkInfo.channelClient
-	_,err := channelClient.Execute(channel.Request{ChaincodeID:sdkInfo.ChaincodeID,Fcn:"init",Args:nil,IsInit:true},channel.WithRetry(retry.DefaultResMgmtOpts))
-	if err!= nil {
-		fmt.Println("初始化链码sacc失败")
+	accumulator := utils.New()
+	accstate := &utils.Record{
+		A: accumulator.GetA().String(),
+		N: accumulator.GetN().String(),
 	}
+	accstateAsBytes,_ := json.Marshal(accstate)
+	channelClient := sdkInfo.channelClient
+	_,err := channelClient.Execute(channel.Request{ChaincodeID:sdkInfo.ChaincodeID,Fcn:"init",Args:[][]byte{[]byte("issuedState"), accstateAsBytes},IsInit:true},channel.WithRetry(retry.DefaultResMgmtOpts))
+	if err!= nil {
+		fmt.Println("链码sacc初始化累加器失败")
+		fmt.Println(err.Error())
+	}
+	fmt.Println("初始化链码sacc成功")
 }
 
 func(sdkInfo *SDKInfo) initContext() error {
