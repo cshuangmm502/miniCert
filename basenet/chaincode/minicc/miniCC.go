@@ -83,7 +83,7 @@ func(t *miniCC) queryState(stub shim.ChaincodeStubInterface,args []string) peer.
 
 //peer chaincode invoke -C myc -n mycc -c '{"Args":["getState","issuedState"]}'
 func(t *miniCC) setState(stub shim.ChaincodeStubInterface,args []string) peer.Response{
-	if len(args) != 2 {
+	if len(args) != 3 {
 		return shim.Error("Incorrect arguments. Expecting a key and a value")
 	}
 	tag := args[0]
