@@ -34,6 +34,7 @@ func (t *miniCC) Init(stub shim.ChaincodeStubInterface) peer.Response{
 	if len(args)!=2{
 		return shim.Error("初始化参数错误")
 	}
+	fmt.Println(" 初始化ing")
 	tag := args[0]
 	accRecordString := args[1]
 	accRecordAsBytes := []byte(accRecordString)

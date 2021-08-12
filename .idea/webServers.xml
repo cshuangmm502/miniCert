@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="c13f8654-47e9-43cd-a060-0ae7ce3f0e4d" name="miniCert" url="http://192.168.112.141">
-        <fileTransfer host="192.168.112.141" port="22" rootFolder="/root/go/src/github.com/hauturier.com" accessType="SFTP">
+      <webServer id="c13f8654-47e9-43cd-a060-0ae7ce3f0e4d" name="miniCert" url="http://192.168.112.142">
+        <fileTransfer host="192.168.112.142" port="22" rootFolder="/root/go/src/github.com/hauturier.com" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

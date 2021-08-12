@@ -9,7 +9,9 @@ import (
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/msp"
 	"github.com/pkg/errors"
 	mspclient "github.com/hyperledger/fabric-sdk-go/pkg/client/msp"
+	"miniCert/service"
 	"miniCert/utils"
+	"time"
 
 	//"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
 	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
@@ -70,13 +72,20 @@ func main(){
 	//queryApprovedCC(sdkInfo)
 	commitCC(sdkInfo)
 	////
-	////serviceSetup := service.ServiceSetup{
-	////	ChaincodeID: "sacc",
-	////	Client:      sdkInfo.channelClient,
-	////}
 	initCC(sdkInfo)
+	serviceSetup := service.ServiceSetup{
+		ChaincodeID: "sacc",
+		Client:      sdkInfo.channelClient,
+	}
+	time.Sleep(10 * time.Second)
 
-
+	msg,err := serviceSetup.ValidateCert()
+	if err != nil {
+		fmt.Println(err.Error())
+	}else {
+		fmt.Println("查询最新发布状态成功 ")
+	}
+	fmt.Println(string(msg))
 	//启动web服务
 	//app := controller.Application{Setup:&serviceSetup}
 	//web.WebStart(app)
