@@ -19,7 +19,7 @@ type miniCC struct {
 }
 
 const ISSUESTATE = "issuedState"
-const REVOKESTATE = "revokeState"
+const REVOKESTATE = "revokedState"
 
 
 func main()  {
@@ -46,30 +46,6 @@ func (t *miniCC) Init(stub shim.ChaincodeStubInterface) peer.Response{
 	_ = json.Unmarshal(accRecordAsBytes,record)
 	return shim.Success([]byte("accumulator state:"+record.A))
 }
-
-//func (t *miniCC) Init(stub shim.ChaincodeStubInterface) peer.Response {
-//	accumulator := New()
-//	N := accumulator.GetN()
-//	set := make(map[string]int)
-//	A0 := accumulator.GetA0()
-//	accstate := &Record{
-//		set: set,
-//		A:  A0.String(),
-//		N:   N.String(),
-//	}
-//	//stateAsBytes,err := json.Marshal(accstate.A)
-//	//if err!= nil{
-//	//	return shim.Error(err.Error())
-//	//}
-//	err := stub.PutState(ISSUESTATE,[]byte(accstate.A))
-//	if err!=nil{
-//		return shim.Error(err.Error())
-//	}
-//
-//	fmt.Printf("Init accumulator %s \n", accstate.A)
-//
-//	return shim.Success(nil)
-//}
 
 func (t *miniCC) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	// Extract the function and args from the transaction proposal
