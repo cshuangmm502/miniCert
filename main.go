@@ -11,6 +11,8 @@ import (
 	mspclient "github.com/hyperledger/fabric-sdk-go/pkg/client/msp"
 	"miniCert/service"
 	"miniCert/utils"
+	"miniCert/web"
+	"miniCert/web/controller"
 	"time"
 
 	//"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
@@ -87,8 +89,8 @@ func main(){
 	}
 	fmt.Println(string(msg))
 	//启动web服务
-	//app := controller.Application{Setup:&serviceSetup}
-	//web.WebStart(app)
+	app := controller.Application{Setup:&serviceSetup}
+	web.WebStart(app)
 	//启动web服务
 }
 
