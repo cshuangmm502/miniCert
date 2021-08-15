@@ -14,12 +14,13 @@ import (
 	rd "math/rand"
 )
 
-const configFilePath = "./conf/"
-const OutputFilePath = ""
+const InputFilePath = "./conf/"
+const OutputFilePath = "./output/"
 
 func CertificateIssuance(){
+
 	//解析根证书
-	caFile, err := ioutil.ReadFile(configFilePath+"cacert.cert")
+	caFile, err := ioutil.ReadFile(InputFilePath+"cacert.cert")
 	if err != nil {
 		return
 	}
@@ -31,7 +32,7 @@ func CertificateIssuance(){
 	}
 
 	//解析私钥
-	keyFile, err := ioutil.ReadFile(configFilePath+"key.pem")
+	keyFile, err := ioutil.ReadFile(InputFilePath+"key.pem")
 	if err != nil {
 		return
 	}
@@ -73,7 +74,7 @@ func CertificateIssuance(){
 	}
 
 	//编码证书文件和私钥文件
-	File1, err := os.Create("./conf/testCert.pem")
+	File1, err := os.Create(OutputFilePath+"testCert.pem")
 	defer File1.Close()
 	if err != nil {
 		fmt.Println(err)
@@ -84,7 +85,7 @@ func CertificateIssuance(){
 	}
 	pem.Encode(File1,caPem)
 
-	File2, err := os.Create("testKey.key")
+	File2, err := os.Create(OutputFilePath+"testKey.key")
 	defer File2.Close()
 	if err != nil {
 		fmt.Println(err)
