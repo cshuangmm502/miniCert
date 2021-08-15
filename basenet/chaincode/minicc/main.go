@@ -19,7 +19,7 @@ type miniCC struct {
 }
 
 const ISSUESTATE = "issuedState"
-const REVOKESTATE = "revokeState"
+const REVOKESTATE = "revokedState"
 
 
 func main()  {
