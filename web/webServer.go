@@ -12,14 +12,14 @@ func WebStart(app controller.Application)  {
 	fs:= http.FileServer(http.Dir("web/static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	//// 指定路由信息(匹配请求)
-	//http.HandleFunc("/", app.LoginView)
-	//http.HandleFunc("/login", app.Login)
-	//http.HandleFunc("/loginout", app.LoginOut)
-	//
-	//http.HandleFunc("/index", app.Index)
+	// 指定路由信息(匹配请求)
+	http.HandleFunc("/", app.LoginView)
+	http.HandleFunc("/login", app.Login)
+	http.HandleFunc("/loginout", app.LoginOut)
+
+	http.HandleFunc("/index", app.Index)
 	//http.HandleFunc("/help", app.Help)
-	//
+
 	//http.HandleFunc("/addEduInfo", app.AddEduShow)	// 显示添加信息页面
 	//http.HandleFunc("/addEdu", app.AddEdu)	// 提交信息请求
 	//

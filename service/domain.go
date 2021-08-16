@@ -16,6 +16,12 @@ type ServiceSetup struct {
 	Client *channel.Client
 }
 
+var serial int
+
+func init(){
+	serial = 0
+}
+
 func regitserEvent(client *channel.Client, chaincodeID, eventID string) (fab.Registration, <-chan *fab.CCEvent) {
 
 	reg, notifier, err := client.RegisterChaincodeEvent(chaincodeID, eventID)
