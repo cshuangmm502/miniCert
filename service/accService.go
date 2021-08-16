@@ -1,6 +1,10 @@
 package service
 
-import "github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
+import (
+	"fmt"
+	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
+	"miniCert/utils"
+)
 
 func (t *ServiceSetup) ValidateCert() ([]byte,error){
 
@@ -109,6 +113,9 @@ func (t *ServiceSetup) UpdateRevokedAccState() (string,error){
 
 
 func (t* ServiceSetup) IssueCert() (string,error){
+	serial++
+	certName := utils.CreateCertificate(serial)
+	fmt.Println(certName)
 	return "",nil
 }
 
