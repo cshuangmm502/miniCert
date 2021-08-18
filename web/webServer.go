@@ -20,6 +20,8 @@ func WebStart(app controller.Application)  {
 	http.HandleFunc("/index", app.Index)
 	//http.HandleFunc("/help", app.Help)
 
+	http.HandleFunc("/issueTest",app.IssueCert)
+
 	//http.HandleFunc("/addEduInfo", app.AddEduShow)	// 显示添加信息页面
 	//http.HandleFunc("/addEdu", app.AddEdu)	// 提交信息请求
 	//

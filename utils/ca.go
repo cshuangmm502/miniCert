@@ -17,7 +17,7 @@ import (
 )
 
 const InputFilePath = "./conf/"
-const OutputFilePath = "./output/"
+var OutputFilePath = os.Getenv("GOPATH")+"/src/github.com/hauturier.com/miniCert/output/"
 
 func CreateCertificate(serial int)string{
 

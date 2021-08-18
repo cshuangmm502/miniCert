@@ -1,31 +1,32 @@
 package main
+
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
+	mspclient "github.com/hyperledger/fabric-sdk-go/pkg/client/msp"
+	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/status"
 	contextAPI "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/msp"
 	"github.com/pkg/errors"
-	mspclient "github.com/hyperledger/fabric-sdk-go/pkg/client/msp"
 	"miniCert/service"
 	"miniCert/utils"
 	"miniCert/web"
 	"miniCert/web/controller"
 	"time"
 
-	//"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
-	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
-	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
-	"os"
-	fabAPI "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
-	lcpackager "github.com/hyperledger/fabric-sdk-go/pkg/fab/ccpackager/lifecycle"
+	mb "github.com/hyperledger/fabric-protos-go/msp"
 	pb "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/resmgmt"
-	"github.com/hyperledger/fabric-sdk-go/third_party/github.com/hyperledger/fabric/common/policydsl"
-	mb "github.com/hyperledger/fabric-protos-go/msp"
+	fabAPI "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
 	contextImpl "github.com/hyperledger/fabric-sdk-go/pkg/context"
+	//"github.com/hyperledger/fabric-sdk-go/pkg/common/errors/retry"
+	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
+	lcpackager "github.com/hyperledger/fabric-sdk-go/pkg/fab/ccpackager/lifecycle"
+	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
+	"github.com/hyperledger/fabric-sdk-go/third_party/github.com/hyperledger/fabric/common/policydsl"
+	"os"
 )
 
 
@@ -81,13 +82,15 @@ func main(){
 	}
 	time.Sleep(10 * time.Second)
 
-	msg,err := serviceSetup.ValidateCert()
+	state := &utils.Record{}
+	msg,err := serviceSetup.QueryIssuedAccState()
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 	}else {
 		fmt.Println("查询最新发布状态成功 ")
 	}
-	fmt.Println(string(msg))
+	json.Unmarshal(msg,state)
+	fmt.Println(state)
 	//启动web服务
 	app := controller.Application{Setup:&serviceSetup}
 	web.WebStart(app)
