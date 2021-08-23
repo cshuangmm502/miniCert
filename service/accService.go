@@ -28,7 +28,7 @@ func (t *ServiceSetup) QueryIssuedAccState() ([]byte,error){
 
 	req := channel.Request{
 		ChaincodeID:     t.ChaincodeID,
-		Fcn:             "getState",
+		Fcn:             "queryState",
 		Args:            [][]byte{[]byte("issuedState")},
 	}
 	respone, err := t.Client.Execute(req)
@@ -51,7 +51,7 @@ func (t *ServiceSetup) QueryRevokedAccState() ([]byte,error){
 
 	req := channel.Request{
 		ChaincodeID:     t.ChaincodeID,
-		Fcn:             "getState",
+		Fcn:             "queryState",
 		Args:            [][]byte{[]byte("revokedState")},
 	}
 	respone, err := t.Client.Execute(req)
@@ -68,24 +68,24 @@ func (t *ServiceSetup) QueryRevokedAccState() ([]byte,error){
 }
 
 func (t *ServiceSetup) UpdateIssuedAccState(newState []byte) (string,error){
-	//eventID := "eventIssuedAccUpdate"
-	//reg, notifier := regitserEvent(t.Client, t.ChaincodeID, eventID)
-	//defer t.Client.UnregisterChaincodeEvent(reg)
+	eventID := "eventIssuedAccUpdate"
+	reg, notifier := regitserEvent(t.Client, t.ChaincodeID, eventID)
+	defer t.Client.UnregisterChaincodeEvent(reg)
 
 	req := channel.Request{
 		ChaincodeID:     t.ChaincodeID,
-		Fcn:             "setState",
-		Args:            [][]byte{[]byte("issuedState"),newState},
+		Fcn:             "updateState",
+		Args:            [][]byte{[]byte("issuedState"),newState,[]byte(eventID)},
 	}
 	respone, err := t.Client.Execute(req)
 	if err != nil {
 		return "", err
 	}
 
-	//err = eventResult(notifier, eventID)
-	//if err != nil {
-	//	return "", err
-	//}
+	err = eventResult(notifier, eventID)
+	if err != nil {
+		return "", err
+	}
 
 	return string(respone.TransactionID), nil
 }

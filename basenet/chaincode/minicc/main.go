@@ -51,10 +51,10 @@ func (t *miniCC) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	// Extract the function and args from the transaction proposal
 	fn, args := stub.GetFunctionAndParameters()
 
-	if fn == "getState" {
+	if fn == "queryState" {
 		return t.queryState(stub, args)
-	}else if fn == "setState" {
-		return t.setState(stub,args)
+	}else if fn == "updateState" {
+		return t.updateState(stub,args)
 	}
 
 	// Return the result as success payload
