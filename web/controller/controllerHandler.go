@@ -55,5 +55,6 @@ func (app *Application) LoginOut(w http.ResponseWriter, r *http.Request)  {
 }
 
 func (app *Application) IssueCert(w http.ResponseWriter, r *http.Request) {
-
+	app.Setup.IssueCert()
+	ShowView(w, r, "index.html", nil)
 }

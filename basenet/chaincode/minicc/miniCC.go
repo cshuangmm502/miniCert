@@ -14,7 +14,6 @@ import (
 //}
 
 //peer chaincode invoke -C myc -n mycc -c '{"Args":["queryState","issuedState"]}'
-//peer chaincode invoke -C myc -n mycc -c '{"function":"queryState","Args":["revokeState"]}'
 func(t *miniCC) queryState(stub shim.ChaincodeStubInterface,args []string) peer.Response {
 	if len(args) != 1 {
 		return shim.Error("Incorrect arguments. Expecting a key")
@@ -30,15 +29,20 @@ func(t *miniCC) queryState(stub shim.ChaincodeStubInterface,args []string) peer.
 	return shim.Success(recordAsBytes)
 }
 
-//peer chaincode invoke -C myc -n mycc -c '{"Args":["getState","issuedState"]}'
-func(t *miniCC) setState(stub shim.ChaincodeStubInterface,args []string) peer.Response{
+//peer chaincode invoke -C myc -n mycc -c '{"Args":["setState","issuedState","123456"]}'
+func(t *miniCC) updateState(stub shim.ChaincodeStubInterface,args []string) peer.Response{
 	if len(args) != 3 {
-		return shim.Error("Incorrect arguments. Expecting a key and a value")
+		return shim.Error("Incorrect arguments. Expecting a key,a value and a eventID")
 	}
 	tag := args[0]
 	err := stub.PutState(tag, []byte(args[1]))
 	if err != nil{
 		return shim.Error("fail to update the accumulator state ")
+	}
+
+	err = stub.SetEvent(args[2],[]byte{})
+	if err!= nil {
+		return shim.Error(err.Error())
 	}
 	return shim.Success([]byte("success to update the state"))
 }

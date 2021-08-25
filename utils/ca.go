@@ -12,12 +12,13 @@ import (
 	"io/ioutil"
 	"math/big"
 	"os"
+	"strconv"
 	"time"
 	rd "math/rand"
 )
 
 const InputFilePath = "./conf/"
-const OutputFilePath = "./output/"
+var OutputFilePath = os.Getenv("GOPATH")+"/src/github.com/hauturier.com/miniCert/output/"
 
 func CreateCertificate(serial int)string{
 
@@ -76,7 +77,7 @@ func CreateCertificate(serial int)string{
 	}
 
 	//编码证书文件和私钥文件
-	File1, err := os.Create(OutputFilePath+"testCert"+string(serial)+".pem")
+	File1, err := os.Create(OutputFilePath+"testCert"+strconv.Itoa(serial)+".pem")
 	defer File1.Close()
 	if err != nil {
 		fmt.Println(err)
@@ -87,7 +88,7 @@ func CreateCertificate(serial int)string{
 	}
 	pem.Encode(File1,caPem)
 
-	File2, err := os.Create(OutputFilePath+"testKey"+string(serial)+".key")
+	File2, err := os.Create(OutputFilePath+"testKey"+strconv.Itoa(serial)+".key")
 	defer File2.Close()
 	if err != nil {
 		fmt.Println(err)
